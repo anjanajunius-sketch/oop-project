@@ -1,9 +1,9 @@
 package com.grocery.oopproject.config;
 
-import com.grocery.oopproject.domain.Admin;
-import com.grocery.oopproject.domain.Cart;
-import com.grocery.oopproject.domain.Customer;
-import com.grocery.oopproject.domain.Review;
+import com.grocery.oopproject.model.Admin;
+import com.grocery.oopproject.model.Cart;
+import com.grocery.oopproject.model.Customer;
+import com.grocery.oopproject.model.Review;
 import com.grocery.oopproject.repository.AdminRepository;
 import com.grocery.oopproject.repository.CartRepository;
 import com.grocery.oopproject.repository.CustomerRepository;

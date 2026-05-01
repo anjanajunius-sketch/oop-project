@@ -80,11 +80,11 @@ Each component implements full CRUD (Create, Read, Update, Delete) and applies a
 src/main/java/com/grocery/oopproject
 ├── OopProjectApplication.java
 ├── config/SecurityConfig.java
-├── domain/      User, Customer, Admin, Cart, CartItem, Product, Order, Review
+├── model/       User, Customer, Admin, Cart, CartItem, Product, Order, Review
 ├── repository/  one Spring Data JPA repository per entity
 ├── service/     CustomerService, AdminService, ProductService, CartService,
 │                OrderService, ReviewService
-└── web/         HomeController + one Thymeleaf controller per member component
+└── controller/  HomeController + one Thymeleaf controller per member component
 src/main/resources
 ├── application.properties
 ├── schema.sql

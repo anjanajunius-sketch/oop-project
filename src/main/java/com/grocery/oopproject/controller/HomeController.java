@@ -1,4 +1,4 @@
-package com.grocery.oopproject.web;
+package com.grocery.oopproject.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

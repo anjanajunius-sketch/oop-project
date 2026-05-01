@@ -1,4 +1,4 @@
-package com.grocery.oopproject.web;
+package com.grocery.oopproject.controller;
 
 import com.grocery.oopproject.service.ProductService;
 import org.springframework.stereotype.Controller;

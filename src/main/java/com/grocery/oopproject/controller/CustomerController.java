@@ -1,6 +1,6 @@
-package com.grocery.oopproject.web;
+package com.grocery.oopproject.controller;
 
-import com.grocery.oopproject.domain.Customer;
+import com.grocery.oopproject.model.Customer;
 import com.grocery.oopproject.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

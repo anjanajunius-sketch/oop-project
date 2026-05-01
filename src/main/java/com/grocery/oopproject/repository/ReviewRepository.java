@@ -1,6 +1,6 @@
 package com.grocery.oopproject.repository;
 
-import com.grocery.oopproject.domain.Review;
+import com.grocery.oopproject.model.Review;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

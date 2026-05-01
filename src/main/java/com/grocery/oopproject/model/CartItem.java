@@ -1,4 +1,4 @@
-package com.grocery.oopproject.domain;
+package com.grocery.oopproject.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
