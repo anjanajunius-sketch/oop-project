@@ -7,7 +7,7 @@ A Spring Boot web application built for the SE1020 OOP project. The system model
 - Java 17, Maven, Spring Boot 3.5.x
 - Spring Web + Thymeleaf (plain HTML test pages — no CSS/JS)
 - Spring Data JPA + Hibernate
-- H2 (file-based, default) — MySQL config also included (commented)
+- H2 (file-based, default) — MySQL/MariaDB also supported via the `mysql` Spring profile (e.g. for a cPanel-hosted database)
 - Spring Security (BCrypt password hashing only — all routes are open for now)
 
 ## Running
@@ -20,15 +20,82 @@ Then open <http://localhost:8080>. The H2 console is available at <http://localh
 
 The schema and seed data (`schema.sql`, `data.sql`) are re-applied on every startup, so the database always starts fresh and consistent.
 
-## Switching to MySQL
+## Switching to MySQL / MariaDB (e.g. a cPanel-hosted database)
 
-In `src/main/resources/application.properties` comment out the H2 datasource block and uncomment the MySQL block. Then:
+The project ships with a `mysql` Spring profile that reads the connection details from environment variables, so credentials never go in git. Steps below assume cPanel; the same flow works with any remote MySQL/MariaDB.
 
-```sql
-CREATE DATABASE grocery;
+### 1. Create the database in cPanel
+
+1. cPanel → **MySQL® Databases**.
+2. **Create New Database**: name it `grocery`. cPanel prepends your account name, so the actual name will be something like `cpaneluser_grocery`. Note the full name.
+3. **Add New User**: pick a username (e.g. `groceryapp`) and a strong password. The full username will look like `cpaneluser_groceryapp`. Note both.
+4. Scroll to **Add User to Database**: pick the user + the database, click *Add*. On the next screen tick **ALL PRIVILEGES**, then *Make Changes*.
+
+### 2. Allow remote connections
+
+1. cPanel → **Remote MySQL®** (sometimes named "Remote Database Access").
+2. Find your public IP at <https://api.ipify.org> and paste it into the **Host** field. Click *Add Host*.
+3. Each team member must add their own public IP here. Don't use `%` (any IP) — it exposes the database to the internet.
+
+> If your cPanel doesn't show "Remote MySQL", or it's grayed out, your hosting provider has disabled remote access. Contact them or use the SSH-tunnel fallback (`ssh -L 3306:localhost:3306 user@yourdomain.com`, then connect to `localhost:3306`).
+
+### 3. Find the host and port
+
+The MySQL host is usually shown at the top of the **MySQL® Databases** page (look for "MySQL Hostname" or similar). It's typically:
+
+- `yourdomain.com`, or
+- `srvXXX.<provider>.com` (e.g. `srv123.namecheaphosting.com`), or
+- A dedicated `mysql.yourdomain.com`.
+
+The port is **3306** unless your provider remapped it (some use 3307).
+
+### 4. Set the four credentials in IntelliJ (no file edits)
+
+Open the run configuration:
+
+1. In the top-right of IntelliJ, click the dropdown next to the green ▶ → **Edit Configurations…**
+2. Select `OopProjectApplication` (or create a new "Spring Boot" run config pointing at it).
+3. Click **Modify options** → tick **Environment variables** and **Active profiles**.
+4. **Active profiles**: `mysql`
+5. **Environment variables**: paste this all on one line (each key separated by `;`), filling in your cPanel values:
+
+   ```
+   DB_URL=jdbc:mysql://YOUR_HOST:3306/cpaneluser_grocery?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true;DB_USER=cpaneluser_groceryapp;DB_PASSWORD=YOUR_PASSWORD
+   ```
+
+6. Apply, then click ▶ Run. Watch the bottom Run console for `Started OopProjectApplication`.
+
+Hibernate will create the 8 tables on first run (no need to run `schema.sql` manually against the remote DB), and `SeedDataRunner` will insert the 5 products + admin + 2 customers + 1 review on first start. Subsequent restarts preserve user-created data.
+
+### Or via the command line
+
+```bash
+SPRING_PROFILES_ACTIVE=mysql \
+DB_URL='jdbc:mysql://YOUR_HOST:3306/cpaneluser_grocery?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true' \
+DB_USER='cpaneluser_groceryapp' \
+DB_PASSWORD='YOUR_PASSWORD' \
+./mvnw spring-boot:run
 ```
 
-Adjust username/password to match your local MySQL.
+PowerShell:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE="mysql"
+$env:DB_URL="jdbc:mysql://YOUR_HOST:3306/cpaneluser_grocery?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+$env:DB_USER="cpaneluser_groceryapp"
+$env:DB_PASSWORD="YOUR_PASSWORD"
+.\mvnw.cmd spring-boot:run
+```
+
+### Troubleshooting
+
+- **`Communications link failure` / connection hangs** → the provider is blocking port 3306 from outside, or your IP isn't whitelisted yet (check Remote MySQL).
+- **`Access denied for user`** → wrong username/password, or the user wasn't added to the database with privileges (step 1.4).
+- **`Unknown database`** → the `DB_URL` doesn't match the `cpaneluser_` prefix exactly.
+- **`Public Key Retrieval is not allowed`** → make sure `allowPublicKeyRetrieval=true` is in the JDBC URL (it is in the examples above).
+- **MariaDB-only syntax errors** → none expected; the schema is plain MySQL DDL that MariaDB accepts. If anything fails, check the Hibernate log for the failing CREATE statement and report it.
+
+To go back to the H2 default just remove `mysql` from "Active profiles" (or unset `SPRING_PROFILES_ACTIVE`).
 
 ## Class diagram
 
@@ -86,8 +153,9 @@ src/main/java/com/grocery/oopproject
 │                OrderService, ReviewService
 └── controller/  HomeController + one Thymeleaf controller per member component
 src/main/resources
-├── application.properties
-├── schema.sql
-├── data.sql
-└── templates/   plain HTML Thymeleaf templates, no CSS/JS
+├── application.properties        H2 default profile
+├── application-mysql.properties  MySQL/MariaDB profile (env-var creds)
+├── schema.sql                    H2-flavoured DDL (Hibernate auto-generates for MySQL)
+├── data.sql                      H2 product seeds
+└── templates/                    plain HTML Thymeleaf templates, no CSS/JS
 ```
