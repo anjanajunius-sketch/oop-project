@@ -1,6 +1,6 @@
 package com.grocery.oopproject.repository;
 
-import com.grocery.oopproject.domain.Order;
+import com.grocery.oopproject.model.Order;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

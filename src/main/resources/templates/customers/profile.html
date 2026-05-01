@@ -1,20 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Customer Profile</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Profile')}"></head>
 <body>
-<h1>Welcome, <span th:text="${customer.name}">Name</span></h1>
-<p><a href="/">Home</a></p>
-<ul>
-    <li>ID: <span th:text="${customer.userId}"></span></li>
-    <li>Email: <span th:text="${customer.email}"></span></li>
-    <li>Address: <span th:text="${customer.address}"></span></li>
-    <li>Phone: <span th:text="${customer.phone}"></span></li>
-    <li>Role: <span th:text="${customer.roleLabel}"></span></li>
-</ul>
-<p>
-    <a th:href="@{|/cart/${customer.userId}|}">My cart</a> |
-    <a th:href="@{|/orders/customer/${customer.userId}|}">My orders</a> |
-    <a th:href="@{|/customers/${customer.userId}/edit|}">Edit profile</a>
-</p>
+<nav th:replace="~{fragments/layout :: navbar('customers')}"></nav>
+
+<main class="container py-4">
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                        <div class="rounded-circle bg-primary-soft text-success d-flex align-items-center justify-content-center fw-bold" style="width:72px;height:72px;font-size:1.7rem;" th:text="${#strings.substring(customer.name,0,1)}">A</div>
+                        <div class="flex-grow-1">
+                            <h1 class="h3 fw-bold mb-1" th:text="'Welcome, ' + ${customer.name}">Welcome, Alice</h1>
+                            <p class="text-muted mb-0">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle" th:text="${customer.roleLabel}">Customer</span>
+                                <span class="ms-2 small">ID: <code th:text="${customer.userId}">U-C1</code></span>
+                            </p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a th:href="@{'/customers/' + ${customer.userId} + '/edit'}" class="btn btn-outline-secondary"><i class="bi bi-pencil me-1"></i>Edit</a>
+                            <a th:href="@{'/cart/' + ${customer.userId}}" class="btn btn-primary"><i class="bi bi-cart3 me-1"></i>My Cart</a>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Email</div>
+                            <div class="fs-5" th:text="${customer.email}">alice@example.com</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Phone</div>
+                            <div class="fs-5" th:text="${customer.phone} ?: '—'">07712...</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Address</div>
+                            <div class="fs-5" th:text="${customer.address} ?: '—'">12, Galle Road, Colombo 03</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h2 class="h5 fw-semibold mb-3">Quick actions</h2>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a th:href="@{'/cart/' + ${customer.userId} + '/add'}" class="text-decoration-none">
+                                <div class="feature-tile">
+                                    <i class="bi bi-cart-plus text-success fs-2"></i>
+                                    <div class="fw-semibold mt-2">Add to Cart</div>
+                                    <div class="small text-muted">Pick from the product catalog.</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a th:href="@{'/orders/place/' + ${customer.userId}}" class="text-decoration-none">
+                                <div class="feature-tile">
+                                    <i class="bi bi-box-seam text-success fs-2"></i>
+                                    <div class="fw-semibold mt-2">Place Order</div>
+                                    <div class="small text-muted">Convert your cart into an order.</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a th:href="@{'/orders/customer/' + ${customer.userId}}" class="text-decoration-none">
+                                <div class="feature-tile">
+                                    <i class="bi bi-clock-history text-success fs-2"></i>
+                                    <div class="fw-semibold mt-2">My Orders</div>
+                                    <div class="small text-muted">Past purchases &amp; summaries.</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

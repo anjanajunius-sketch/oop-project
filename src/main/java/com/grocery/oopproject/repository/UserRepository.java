@@ -1,6 +1,6 @@
 package com.grocery.oopproject.repository;
 
-import com.grocery.oopproject.domain.User;
+import com.grocery.oopproject.model.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

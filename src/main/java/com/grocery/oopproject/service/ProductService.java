@@ -1,6 +1,6 @@
 package com.grocery.oopproject.service;
 
-import com.grocery.oopproject.domain.Product;
+import com.grocery.oopproject.model.Product;
 import com.grocery.oopproject.repository.ProductRepository;
 import java.util.List;
 import java.util.UUID;

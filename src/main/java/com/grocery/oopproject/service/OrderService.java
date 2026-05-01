@@ -1,8 +1,8 @@
 package com.grocery.oopproject.service;
 
-import com.grocery.oopproject.domain.Cart;
-import com.grocery.oopproject.domain.Customer;
-import com.grocery.oopproject.domain.Order;
+import com.grocery.oopproject.model.Cart;
+import com.grocery.oopproject.model.Customer;
+import com.grocery.oopproject.model.Order;
 import com.grocery.oopproject.repository.CustomerRepository;
 import com.grocery.oopproject.repository.OrderRepository;
 import java.time.LocalDateTime;

@@ -1,30 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Customers</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Customers')}"></head>
 <body>
-<h1>Customers</h1>
-<p><a href="/">Home</a> | <a href="/customers/register">Register new customer</a></p>
-<table border="1" cellpadding="6">
-    <thead>
-    <tr><th>ID</th><th>Name</th><th>Email</th><th>Address</th><th>Phone</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="c : ${customers}">
-        <td th:text="${c.userId}">U-C1</td>
-        <td th:text="${c.name}">Name</td>
-        <td th:text="${c.email}">email</td>
-        <td th:text="${c.address}">addr</td>
-        <td th:text="${c.phone}">phone</td>
-        <td>
-            <a th:href="@{|/customers/${c.userId}/edit|}">edit</a> |
-            <a th:href="@{|/cart/${c.userId}|}">cart</a> |
-            <a th:href="@{|/orders/customer/${c.userId}|}">orders</a> |
-            <form th:action="@{|/customers/${c.userId}/delete|}" method="post" style="display:inline">
-                <button type="submit">delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<nav th:replace="~{fragments/layout :: navbar('customers')}"></nav>
+
+<header th:replace="~{fragments/layout :: page-header('Customer Directory', 'All registered customer accounts in the system.', 'bi-people')}"></header>
+
+<main class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <span class="text-muted small"><i class="bi bi-people me-1"></i><span th:text="${#lists.size(customers)}">0</span> customers</span>
+        <a th:href="@{/customers/register}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Register New Customer</a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${customers}">
+                    <td><code th:text="${c.userId}">U-C1</code></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-primary-soft text-success d-flex align-items-center justify-content-center fw-bold" style="width:36px;height:36px;" th:text="${#strings.substring(c.name,0,1)}">A</div>
+                            <span class="fw-semibold" th:text="${c.name}">Alice</span>
+                        </div>
+                    </td>
+                    <td th:text="${c.email}">alice@example.com</td>
+                    <td th:text="${c.phone} ?: '—'">07712...</td>
+                    <td class="text-truncate" style="max-width: 220px;" th:text="${c.address} ?: '—'">12, Galle Road</td>
+                    <td class="text-end pe-3">
+                        <a th:href="@{'/customers/' + ${c.userId} + '/edit'}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <form th:action="@{'/customers/' + ${c.userId} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete this customer?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(customers)}">
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                        No customers yet. <a th:href="@{/customers/register}">Register one</a>.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

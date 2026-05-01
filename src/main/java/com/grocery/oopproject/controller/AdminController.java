@@ -1,6 +1,6 @@
-package com.grocery.oopproject.web;
+package com.grocery.oopproject.controller;
 
-import com.grocery.oopproject.domain.Admin;
+import com.grocery.oopproject.model.Admin;
 import com.grocery.oopproject.service.AdminService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

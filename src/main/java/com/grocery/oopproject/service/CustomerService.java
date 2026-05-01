@@ -1,7 +1,7 @@
 package com.grocery.oopproject.service;
 
-import com.grocery.oopproject.domain.Cart;
-import com.grocery.oopproject.domain.Customer;
+import com.grocery.oopproject.model.Cart;
+import com.grocery.oopproject.model.Customer;
 import com.grocery.oopproject.repository.CartRepository;
 import com.grocery.oopproject.repository.CustomerRepository;
 import com.grocery.oopproject.repository.UserRepository;
@@ -45,7 +45,7 @@ public class CustomerService {
         }
         String userId = "U-C-" + UUID.randomUUID().toString().substring(0, 8);
         Customer c = new Customer(userId, name, email, passwordEncoder.encode(rawPassword), address, phone);
-        customerRepository.save(c);
+        c = customerRepository.save(c);
 
         Cart cart = new Cart("CRT-" + UUID.randomUUID().toString().substring(0, 8), c);
         cartRepository.save(cart);

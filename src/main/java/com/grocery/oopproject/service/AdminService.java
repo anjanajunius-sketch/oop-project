@@ -1,6 +1,6 @@
 package com.grocery.oopproject.service;
 
-import com.grocery.oopproject.domain.Admin;
+import com.grocery.oopproject.model.Admin;
 import com.grocery.oopproject.repository.AdminRepository;
 import com.grocery.oopproject.repository.UserRepository;
 import java.util.List;

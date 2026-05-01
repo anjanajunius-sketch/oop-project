@@ -1,16 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Edit Customer</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Edit Customer')}"></head>
 <body>
-<h1>Edit Customer <span th:text="${customer.userId}"></span></h1>
-<p><a href="/">Home</a> | <a href="/customers">Customers</a></p>
-<p th:if="${error}" th:text="${error}" style="color:red"></p>
-<form th:action="@{|/customers/${customer.userId}/edit|}" method="post">
-    <p>Name: <input name="name" th:value="${customer.name}" required></p>
-    <p>Email: <input name="email" type="email" th:value="${customer.email}" required></p>
-    <p>Address: <input name="address" th:value="${customer.address}"></p>
-    <p>Phone: <input name="phone" th:value="${customer.phone}"></p>
-    <p><button type="submit">Save</button></p>
-</form>
+<nav th:replace="~{fragments/layout :: navbar('customers')}"></nav>
+
+<header th:replace="~{fragments/layout :: page-header('Edit Customer', 'Update profile details for this account.', 'bi-pencil-square')}"></header>
+
+<main class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <div th:replace="~{fragments/layout :: alert(${error}, 'danger')}"></div>
+
+                    <form th:action="@{'/customers/' + ${customer.userId} + '/edit'}" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="userId">Customer ID</label>
+                                <input id="userId" type="text" class="form-control" th:value="${customer.userId}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Role</label>
+                                <input type="text" class="form-control" th:value="${customer.roleLabel}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="name">Name</label>
+                                <input id="name" name="name" type="text" class="form-control" th:value="${customer.name}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="email">Email</label>
+                                <input id="email" name="email" type="email" class="form-control" th:value="${customer.email}" required>
+                            </div>
+                            <div class="col-md-7">
+                                <label class="form-label" for="address">Address</label>
+                                <input id="address" name="address" type="text" class="form-control" th:value="${customer.address}">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label" for="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" class="form-control" th:value="${customer.phone}">
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-1"></i>Save Changes</button>
+                            <a th:href="@{/customers}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

@@ -1,19 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Admin Dashboard</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
 <body>
-<h1>Welcome, <span th:text="${admin.name}">Admin</span></h1>
-<p><a href="/">Home</a></p>
-<ul>
-    <li>ID: <span th:text="${admin.userId}"></span></li>
-    <li>Email: <span th:text="${admin.email}"></span></li>
-    <li>Role: <span th:text="${admin.roleName}"></span> (<span th:text="${admin.roleLabel}"></span>)</li>
-</ul>
-<p>
-    <a href="/products">Manage products</a> |
-    <a href="/products/add">Add product</a> |
-    <a href="/admins">All admins</a> |
-    <a href="/reviews/moderate">Moderate reviews</a>
-</p>
+<nav th:replace="~{fragments/layout :: navbar('admins')}"></nav>
+
+<main class="container py-4">
+
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <div class="rounded-circle bg-warning bg-opacity-10 text-warning-emphasis d-flex align-items-center justify-content-center fw-bold" style="width:64px;height:64px;font-size:1.5rem;" th:text="${#strings.substring(admin.name,0,1)}">A</div>
+        <div class="flex-grow-1">
+            <h1 class="h3 fw-bold mb-1" th:text="'Welcome, ' + ${admin.name}">Welcome, Admin</h1>
+            <p class="text-muted mb-0">
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle" th:text="${admin.roleLabel}">Admin</span>
+                <span class="ms-2 small">Role: <code th:text="${admin.roleName}">SUPER_ADMIN</code></span>
+                <span class="ms-2 small">ID: <code th:text="${admin.userId}">U-A1</code></span>
+            </p>
+        </div>
+    </div>
+
+    <h2 class="h5 fw-semibold mb-3 text-muted text-uppercase small">Manage</h2>
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-lg-3">
+            <a th:href="@{/products}" class="text-decoration-none text-reset">
+                <div class="feature-tile">
+                    <div class="icon mb-3"><i class="bi bi-bag"></i></div>
+                    <div class="fw-semibold">Products</div>
+                    <div class="small text-muted">Catalog &amp; stock</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a th:href="@{/customers}" class="text-decoration-none text-reset">
+                <div class="feature-tile">
+                    <div class="icon mb-3"><i class="bi bi-people"></i></div>
+                    <div class="fw-semibold">Customers</div>
+                    <div class="small text-muted">Account directory</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a th:href="@{/orders}" class="text-decoration-none text-reset">
+                <div class="feature-tile">
+                    <div class="icon mb-3"><i class="bi bi-box-seam"></i></div>
+                    <div class="fw-semibold">Orders</div>
+                    <div class="small text-muted">All purchases</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a th:href="@{/reviews/moderate}" class="text-decoration-none text-reset">
+                <div class="feature-tile">
+                    <div class="icon mb-3"><i class="bi bi-shield-check"></i></div>
+                    <div class="fw-semibold">Moderate Reviews</div>
+                    <div class="small text-muted">Approve / hide</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <h2 class="h5 fw-semibold mb-3 text-muted text-uppercase small">Quick actions</h2>
+    <div class="d-flex flex-wrap gap-2">
+        <a th:href="@{/products/add}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Product</a>
+        <a th:href="@{/admins/register}" class="btn btn-outline-secondary"><i class="bi bi-shield-plus me-1"></i>Add Admin</a>
+        <a th:href="@{'/admins/' + ${admin.userId} + '/edit'}" class="btn btn-outline-secondary"><i class="bi bi-pencil me-1"></i>Edit My Account</a>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

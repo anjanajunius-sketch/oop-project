@@ -1,30 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Reviews</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Reviews')}"></head>
 <body>
-<h1>Reviews <span th:if="${product != null}">for <span th:text="${product.name}"></span></span></h1>
-<p><a href="/">Home</a> | <a href="/reviews/add">Add review</a> | <a href="/reviews/moderate">Moderate</a></p>
-<table border="1" cellpadding="6">
-    <thead>
-    <tr><th>ID</th><th>Product</th><th>Customer</th><th>Rating</th><th>Comment</th><th>Created</th><th>Moderated</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="r : ${reviews}">
-        <td th:text="${r.reviewId}"></td>
-        <td th:text="${r.product.name}"></td>
-        <td th:text="${r.customer.name}"></td>
-        <td th:text="${r.rating}"></td>
-        <td th:text="${r.comment}"></td>
-        <td th:text="${r.createdAt}"></td>
-        <td th:text="${r.moderated}"></td>
-        <td>
-            <a th:href="@{|/reviews/${r.reviewId}/edit|}">edit</a> |
-            <form th:action="@{|/reviews/${r.reviewId}/delete|}" method="post" style="display:inline">
-                <button type="submit">delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<nav th:replace="~{fragments/layout :: navbar('reviews')}"></nav>
+
+<header th:replace="~{fragments/layout :: page-header(${product != null} ? 'Reviews for ' + ${product.name} : 'Customer Reviews', 'Verified ratings and feedback from real customers.', 'bi-star')}"></header>
+
+<main class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <span class="text-muted small"><i class="bi bi-chat-quote me-1"></i><span th:text="${#lists.size(reviews)}">0</span> reviews</span>
+        <a th:href="@{/reviews/add}" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Write a Review</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(reviews)}" class="card">
+        <div class="card-body text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+            No reviews yet. <a th:href="@{/reviews/add}">Be the first to review</a>.
+        </div>
+    </div>
+
+    <div class="row g-3" th:unless="${#lists.isEmpty(reviews)}">
+        <div class="col-md-6" th:each="r : ${reviews}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="fw-semibold" th:text="${r.product.name}">Basmati Rice</div>
+                            <div class="small text-muted" th:text="'by ' + ${r.customer.name} + ' · ' + ${r.createdAt}">by Alice · 2026-04-30</div>
+                        </div>
+                        <span class="badge"
+                              th:classappend="${r.moderated} ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning-emphasis'"
+                              th:text="${r.moderated} ? 'Approved' : 'Pending'">Pending</span>
+                    </div>
+
+                    <div class="mb-2">
+                        <span class="star" th:each="i : ${#numbers.sequence(1, 5)}"
+                              th:classappend="${i > r.rating} ? 'star-empty'">
+                            <i class="bi bi-star-fill"></i>
+                        </span>
+                        <span class="text-muted small ms-1" th:text="${r.rating} + '/5'">5/5</span>
+                    </div>
+
+                    <p class="small mb-3" th:text="${r.comment} ?: '(no comment)'">Excellent rice...</p>
+
+                    <div class="d-flex gap-1">
+                        <a th:href="@{'/reviews/' + ${r.reviewId} + '/edit'}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                        <form th:action="@{'/reviews/' + ${r.reviewId} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete this review?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>
