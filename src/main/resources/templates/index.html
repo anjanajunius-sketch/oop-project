@@ -1,53 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Online Grocery Management System</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
 <body>
-<h1>Online Grocery Management System</h1>
-<p>Plain HTML test pages — one section per team member component.</p>
+<nav th:replace="~{fragments/layout :: navbar('home')}"></nav>
 
-<h2>1. Customer Management</h2>
-<ul>
-    <li><a href="/customers">List customers</a></li>
-    <li><a href="/customers/register">Register customer</a></li>
-    <li><a href="/customers/login">Customer login</a></li>
-</ul>
+<main class="container py-4">
 
-<h2>2. Admin Management</h2>
-<ul>
-    <li><a href="/admins">List admins</a></li>
-    <li><a href="/admins/register">Register admin</a></li>
-    <li><a href="/admins/login">Admin login</a></li>
-</ul>
+    <!-- Hero -->
+    <section class="hero mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge mb-3"><i class="bi bi-stars me-1"></i>SE1020 OOP Project</span>
+                <h1 class="display-5 mb-3">Online Grocery Management System</h1>
+                <p class="lead mb-4 opacity-90">A full-stack Spring Boot application that demonstrates the OOP foundations &mdash; encapsulation, inheritance and polymorphism &mdash; through a working e-commerce backend.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:href="@{/products}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-bag me-2"></i>Browse Products</a>
+                    <a th:href="@{/customers/register}" class="btn btn-outline-light btn-lg"><i class="bi bi-person-plus me-2"></i>Create Account</a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center d-none d-lg-block">
+                <i class="bi bi-basket3-fill" style="font-size: 9rem; opacity: 0.25;"></i>
+            </div>
+        </div>
+    </section>
 
-<h2>3. Product Management</h2>
-<ul>
-    <li><a href="/products">List products</a></li>
-    <li><a href="/products/add">Add product</a></li>
-</ul>
+    <!-- 6 member components -->
+    <h2 class="h4 fw-bold mb-1">Member Components</h2>
+    <p class="text-muted mb-4">Six independent modules &mdash; one per team member &mdash; with full CRUD wired through services, repositories and controllers.</p>
 
-<h2>4. Cart Management</h2>
-<ul>
-    <li><a href="/cart/U-C1">View cart for U-C1</a></li>
-    <li><a href="/cart/U-C1/add">Add item to U-C1's cart</a></li>
-</ul>
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/customers}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-person-vcard"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">1. Customer Management</h3>
+                    <p class="small text-muted mb-3">Register, login, profile editing &amp; account directory.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/admins}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-shield-lock"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">2. Admin Management</h3>
+                    <p class="small text-muted mb-3">Admin login, role-aware dashboard &amp; account control.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/products}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-bag"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">3. Product Management</h3>
+                    <p class="small text-muted mb-3">Catalog with price &amp; stock; admin-side add / edit / delete.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/cart/U-C1}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-cart3"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">4. Cart Management</h3>
+                    <p class="small text-muted mb-3">Add / remove / update items, live total calculation.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/orders}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-box-seam"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">5. Order Management</h3>
+                    <p class="small text-muted mb-3">Place orders from cart, generate summary &amp; history.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a th:href="@{/reviews}" class="text-decoration-none text-reset">
+                <div class="feature-tile h-100">
+                    <div class="icon mb-3"><i class="bi bi-star"></i></div>
+                    <h3 class="h5 mb-2 fw-semibold">6. Review Management</h3>
+                    <p class="small text-muted mb-3">Customer reviews with admin moderation &amp; ratings.</p>
+                    <span class="small text-success fw-semibold">Open module <i class="bi bi-arrow-right"></i></span>
+                </div>
+            </a>
+        </div>
+    </div>
 
-<h2>5. Order Management</h2>
-<ul>
-    <li><a href="/orders">List all orders</a></li>
-    <li><a href="/orders/place/U-C1">Place order for U-C1</a></li>
-</ul>
+    <!-- OOP demonstration callout -->
+    <section class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="stat-label">Encapsulation</div>
+                <div class="stat-value mt-2"><i class="bi bi-shield-check"></i></div>
+                <p class="small text-muted mt-2 mb-0">Private fields, controlled access through services.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="stat-label">Inheritance</div>
+                <div class="stat-value mt-2"><i class="bi bi-diagram-3"></i></div>
+                <p class="small text-muted mt-2 mb-0">Customer &amp; Admin extend abstract User (JOINED).</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="stat-label">Polymorphism</div>
+                <div class="stat-value mt-2"><i class="bi bi-arrow-repeat"></i></div>
+                <p class="small text-muted mt-2 mb-0">Role labels resolved at runtime via overrides.</p>
+            </div>
+        </div>
+    </section>
 
-<h2>6. Review Management</h2>
-<ul>
-    <li><a href="/reviews">List reviews</a></li>
-    <li><a href="/reviews/add">Add review</a></li>
-    <li><a href="/reviews/moderate">Moderate reviews</a></li>
-</ul>
+</main>
 
-<hr>
-<p><a href="/h2-console">H2 console</a> (JDBC URL: <code>jdbc:h2:file:./data/grocery</code>, user <code>sa</code>, no password)</p>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

@@ -1,22 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Order Summary</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Order Summary')}"></head>
 <body>
-<h1>Order <span th:text="${order.orderId}"></span></h1>
-<p><a href="/">Home</a> | <a href="/orders">All orders</a></p>
-<ul>
-    <li>Customer: <span th:text="${order.customer.name}"></span> (<span th:text="${order.customer.userId}"></span>)</li>
-    <li>Date: <span th:text="${order.date}"></span></li>
-    <li>Cart ID: <span th:text="${order.cartId}"></span></li>
-    <li>Total: <span th:text="${order.totalAmount}"></span></li>
-</ul>
-<h2>Summary</h2>
-<pre th:text="${order.summary}"></pre>
+<nav th:replace="~{fragments/layout :: navbar('orders')}"></nav>
 
-<h2>Edit date</h2>
-<form th:action="@{|/orders/${order.orderId}/update|}" method="post">
-    <p>Date: <input name="date" th:value="${order.date}" required></p>
-    <p><button type="submit">Update date</button></p>
-</form>
+<main class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-success-subtle text-success d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                    <i class="bi bi-check-circle-fill" style="font-size: 2.6rem;"></i>
+                </div>
+                <h1 class="h3 fw-bold mb-1">Order Confirmed</h1>
+                <p class="text-muted mb-0">Order ID: <code th:text="${order.orderId}">ORD-fb5cd4d2</code></p>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Customer</div>
+                            <div class="fw-semibold" th:text="${order.customer.name}">Alice</div>
+                            <div class="small text-muted" th:text="${order.customer.email}">alice@...</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Date</div>
+                            <div th:text="${order.date}">2026-04-30T10:00:00</div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="text-muted small text-uppercase fw-semibold mb-1">Total</div>
+                            <div class="fs-3 fw-bold text-success" th:text="'LKR ' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">LKR 4,320.00</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-muted small text-uppercase fw-semibold mb-2">Summary</div>
+                    <div class="bg-light rounded p-3 small font-monospace" th:text="${order.summary} ?: ${order.generateOrderSummary()}">
+                        Order ORD-... placed on ...
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:href="@{'/orders/customer/' + ${order.customer.userId}}" class="btn btn-outline-secondary"><i class="bi bi-clock-history me-1"></i>Customer's Orders</a>
+                        <a th:href="@{/orders}" class="btn btn-outline-secondary"><i class="bi bi-list me-1"></i>All Orders</a>
+                        <a th:href="@{/products}" class="btn btn-primary ms-auto"><i class="bi bi-bag me-1"></i>Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

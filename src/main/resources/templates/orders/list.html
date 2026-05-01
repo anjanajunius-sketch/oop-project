@@ -1,28 +1,62 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Orders</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Orders')}"></head>
 <body>
-<h1>Orders <span th:if="${customer != null}">for <span th:text="${customer.name}"></span></span></h1>
-<p><a href="/">Home</a></p>
-<table border="1" cellpadding="6">
-    <thead>
-    <tr><th>Order ID</th><th>Customer</th><th>Cart</th><th>Date</th><th>Total</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="o : ${orders}">
-        <td th:text="${o.orderId}"></td>
-        <td th:text="${o.customer.name}"></td>
-        <td th:text="${o.cartId}"></td>
-        <td th:text="${o.date}"></td>
-        <td th:text="${o.totalAmount}"></td>
-        <td>
-            <a th:href="@{|/orders/${o.orderId}|}">summary</a> |
-            <form th:action="@{|/orders/${o.orderId}/delete|}" method="post" style="display:inline">
-                <button type="submit">delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<nav th:replace="~{fragments/layout :: navbar('orders')}"></nav>
+
+<header th:replace="~{fragments/layout :: page-header('Orders', ${customer != null} ? 'Order history for ' + ${customer.name} : 'All orders placed in the system.', 'bi-box-seam')}"></header>
+
+<main class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <span class="text-muted small"><i class="bi bi-receipt me-1"></i><span th:text="${#lists.size(orders)}">0</span> orders</span>
+        <a th:if="${customer != null}" th:href="@{'/orders/place/' + ${customer.userId}}" class="btn btn-primary">
+            <i class="bi bi-bag-check me-1"></i>Place a New Order
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${orders}">
+                    <td><code th:text="${o.orderId}">ORD-...</code></td>
+                    <td>
+                        <div class="fw-semibold" th:text="${o.customer.name}">Alice</div>
+                        <div class="small text-muted" th:text="${o.customer.userId}">U-C1</div>
+                    </td>
+                    <td class="text-muted small" th:text="${o.date}">2026-04-30T10:00:00</td>
+                    <td class="text-end fw-bold text-success" th:text="'LKR ' + ${#numbers.formatDecimal(o.totalAmount, 1, 'COMMA', 2, 'POINT')}">LKR 4,320.00</td>
+                    <td class="text-end pe-3">
+                        <a th:href="@{'/orders/' + ${o.orderId}}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye me-1"></i>View</a>
+                        <form th:action="@{'/orders/' + ${o.orderId} + '/delete'}" method="post" class="d-inline" onsubmit="return confirm('Delete this order?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(orders)}">
+                    <td colspan="5" class="text-center text-muted py-5">
+                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
+                        No orders yet.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

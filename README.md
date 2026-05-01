@@ -5,24 +5,35 @@ A Spring Boot web application built for the SE1020 OOP project. The system model
 ## Stack
 
 - Java 17, Maven, Spring Boot 3.5.x
-- Spring Web + Thymeleaf (plain HTML test pages — no CSS/JS)
+- Spring Web + Thymeleaf (modern responsive UI: Bootstrap 5.3 + Bootstrap Icons + Inter font, all via CDN — no npm/build step)
 - Spring Data JPA + Hibernate
-- H2 (file-based, default) — MySQL/MariaDB also supported via the `mysql` Spring profile (e.g. for a cPanel-hosted database)
+- MySQL / MariaDB (default datasource — wired for a cPanel-hosted database). H2 is used only for `mvn test`.
 - Spring Security (BCrypt password hashing only — all routes are open for now)
 
 ## Running
 
-```bash
-./mvnw spring-boot:run
-```
+The default `application.properties` is wired against the cPanel MySQL DB (host `us101.serverclubservers.com`, db `paperzon_oop`). You only need to provide the password — credentials are read from environment variables so the password never lands in git.
 
-Then open <http://localhost:8080>. The H2 console is available at <http://localhost:8080/h2-console> with JDBC URL `jdbc:h2:file:./data/grocery`, user `sa`, no password.
+In IntelliJ:
 
-The schema and seed data (`schema.sql`, `data.sql`) are re-applied on every startup, so the database always starts fresh and consistent.
+1. Run > **Edit Configurations…** > select `OopProjectApplication`.
+2. **Modify options** > tick **Environment variables**.
+3. Click the small icon at the right of the field to open the table editor and add **one row per variable**:
 
-## Switching to MySQL / MariaDB (e.g. a cPanel-hosted database)
+   | Name | Value |
+   |---|---|
+   | `DB_URL` | `jdbc:mysql://us101.serverclubservers.com:3306/paperzon_oop?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true` |
+   | `DB_USER` | `paperzon_oop` |
+   | `DB_PASSWORD` | `<your real cPanel password>` |
 
-The project ships with a `mysql` Spring profile that reads the connection details from environment variables, so credentials never go in git. Steps below assume cPanel; the same flow works with any remote MySQL/MariaDB.
+   (Use the table editor — *not* the inline `;`-separated field — because the password may contain `;` or `[` `]`.)
+4. Apply, then click ▶ Run. Open <http://localhost:8080>.
+
+Hibernate creates the 8 tables on first run; `SeedDataRunner` inserts the 5 demo products + 1 admin + 2 customers + 1 review idempotently. Subsequent restarts preserve user-created data.
+
+## Setting up a fresh cPanel MySQL / MariaDB database
+
+The steps below show how to create a brand-new cPanel database from scratch. If you've already received `DB_URL` / `DB_USER` / `DB_PASSWORD` from a teammate, skip ahead to the [Running](#running) section.
 
 ### 1. Create the database in cPanel
 
