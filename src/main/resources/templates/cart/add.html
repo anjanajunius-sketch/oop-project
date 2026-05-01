@@ -1,19 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Add to Cart</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Add to Cart')}"></head>
 <body>
-<h1>Add item to cart</h1>
-<p><a href="/">Home</a> | <a th:href="@{|/cart/${customerId}|}">Back to cart</a></p>
-<p th:if="${error}" th:text="${error}" style="color:red"></p>
-<form th:action="@{|/cart/${customerId}/add|}" method="post">
-    <p>Product:
-        <select name="productId" required>
-            <option th:each="p : ${products}" th:value="${p.productId}"
-                    th:text="|${p.name} (${p.price})|"></option>
-        </select>
-    </p>
-    <p>Quantity: <input name="qty" type="number" min="1" value="1" required></p>
-    <p><button type="submit">Add</button></p>
-</form>
+<nav th:replace="~{fragments/layout :: navbar('cart')}"></nav>
+
+<header th:replace="~{fragments/layout :: page-header('Add to Cart', 'Pick a product and quantity.', 'bi-cart-plus')}"></header>
+
+<main class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <div th:replace="~{fragments/layout :: alert(${error}, 'danger')}"></div>
+
+                    <p class="text-muted small mb-4"><i class="bi bi-person me-1"></i>Adding to cart for <code th:text="${customerId}">U-C1</code></p>
+
+                    <form th:action="@{'/cart/' + ${customerId} + '/add'}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="productId">Product</label>
+                            <select id="productId" name="productId" class="form-select form-select-lg" required>
+                                <option value="" disabled selected>— select a product —</option>
+                                <option th:each="p : ${products}" th:value="${p.productId}"
+                                        th:text="${p.name} + '  (LKR ' + ${#numbers.formatDecimal(p.price, 1, 'COMMA', 2, 'POINT')} + ')'">
+                                    Basmati Rice (LKR 1,850.00)
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="qty">Quantity</label>
+                            <input id="qty" name="qty" type="number" min="1" class="form-control form-control-lg" required value="1">
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-cart-plus me-1"></i>Add to Cart</button>
+                            <a th:href="@{'/cart/' + ${customerId}}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>

@@ -1,46 +1,96 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Cart</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Shopping Cart')}"></head>
 <body>
-<h1>Cart for <span th:text="${customer.name}"></span></h1>
-<p><a href="/">Home</a> | <a th:href="@{|/cart/${customer.userId}/add|}">Add item</a> |
-    <a th:href="@{|/orders/place/${customer.userId}|}">Place order</a></p>
+<nav th:replace="~{fragments/layout :: navbar('cart')}"></nav>
 
-<p>Cart ID: <span th:text="${cart.cartId}"></span></p>
+<header th:replace="~{fragments/layout :: page-header('Shopping Cart', 'Items currently in your basket.', 'bi-cart3')}"></header>
 
-<table border="1" cellpadding="6">
-    <thead>
-    <tr><th>Product</th><th>Unit price</th><th>Qty</th><th>Line total</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="i : ${cart.items}">
-        <td th:text="${i.product.name}"></td>
-        <td th:text="${i.product.price}"></td>
-        <td th:text="${i.quantity}"></td>
-        <td th:text="${i.lineTotal}"></td>
-        <td>
-            <form th:action="@{|/cart/${customer.userId}/update|}" method="post" style="display:inline">
-                <input type="hidden" name="productId" th:value="${i.product.productId}">
-                <input type="number" name="qty" th:value="${i.quantity}" min="0">
-                <button type="submit">update</button>
-            </form>
-            <form th:action="@{|/cart/${customer.userId}/remove|}" method="post" style="display:inline">
-                <input type="hidden" name="productId" th:value="${i.product.productId}">
-                <button type="submit">remove</button>
-            </form>
-        </td>
-    </tr>
-    <tr th:if="${cart.items.isEmpty()}">
-        <td colspan="5"><em>Cart is empty</em></td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <tr><th colspan="3">Total</th><th th:text="${total}">0</th><th>
-        <form th:action="@{|/cart/${customer.userId}/clear|}" method="post" style="display:inline">
-            <button type="submit">clear cart</button>
-        </form>
-    </th></tr>
-    </tfoot>
-</table>
+<main class="container py-4">
+
+    <div class="row g-4">
+        <!-- Cart items -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold"><i class="bi bi-cart3 me-1"></i>Cart <code th:text="${cart.cartId}">CRT-1</code></span>
+                    <span class="text-muted small" th:if="${customer != null}" th:text="'for ' + ${customer.name}">for Alice</span>
+                </div>
+                <div class="table-responsive" th:unless="${#lists.isEmpty(cart.items)}">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-end">Price</th>
+                            <th class="text-center" style="width: 180px;">Quantity</th>
+                            <th class="text-end">Subtotal</th>
+                            <th class="text-end pe-3">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${cart.items}">
+                            <td>
+                                <div class="fw-semibold" th:text="${item.product.name}">Basmati Rice</div>
+                                <div class="small text-muted"><code th:text="${item.product.productId}">P-1</code></div>
+                            </td>
+                            <td class="text-end" th:text="'LKR ' + ${#numbers.formatDecimal(item.product.price, 1, 'COMMA', 2, 'POINT')}">LKR 1,850.00</td>
+                            <td class="text-center">
+                                <form th:action="@{'/cart/' + ${cart.customer.userId} + '/update'}" method="post" class="d-flex gap-1 justify-content-center">
+                                    <input type="hidden" name="productId" th:value="${item.product.productId}">
+                                    <input type="number" name="qty" min="1" class="form-control form-control-sm" style="width:90px;" th:value="${item.quantity}">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="Update"><i class="bi bi-arrow-repeat"></i></button>
+                                </form>
+                            </td>
+                            <td class="text-end fw-semibold" th:text="'LKR ' + ${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">LKR 3,700.00</td>
+                            <td class="text-end pe-3">
+                                <form th:action="@{'/cart/' + ${cart.customer.userId} + '/remove'}" method="post">
+                                    <input type="hidden" name="productId" th:value="${item.product.productId}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove"><i class="bi bi-x-lg"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body text-center py-5 text-muted" th:if="${#lists.isEmpty(cart.items)}">
+                    <i class="bi bi-cart-x fs-1 d-block mb-2 opacity-50"></i>
+                    Your cart is empty.
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header fw-semibold"><i class="bi bi-receipt me-1"></i>Order Summary</div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span class="text-muted">Items</span>
+                        <span th:text="${#lists.size(cart.items)}">0</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-semibold">Total</span>
+                        <span class="fs-4 fw-bold text-success" th:text="'LKR ' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">LKR 4,320.00</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a th:href="@{'/cart/' + ${cart.customer.userId} + '/add'}" class="btn btn-outline-secondary"><i class="bi bi-cart-plus me-1"></i>Add More Items</a>
+                        <a th:href="@{'/orders/place/' + ${cart.customer.userId}}" class="btn btn-primary" th:classappend="${#lists.isEmpty(cart.items)} ? 'disabled'">
+                            <i class="bi bi-bag-check me-1"></i>Proceed to Checkout
+                        </a>
+                        <form th:action="@{'/cart/' + ${cart.customer.userId} + '/clear'}" method="post" th:if="${!#lists.isEmpty(cart.items)}" onsubmit="return confirm('Empty the cart?');">
+                            <button type="submit" class="btn btn-outline-danger w-100"><i class="bi bi-trash me-1"></i>Empty Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
 </body>
 </html>
