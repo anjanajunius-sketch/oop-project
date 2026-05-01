@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Add to Cart</title></head>
+<body>
+<h1>Add item to cart</h1>
+<p><a href="/">Home</a> | <a th:href="@{|/cart/${customerId}|}">Back to cart</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form th:action="@{|/cart/${customerId}/add|}" method="post">
+    <p>Product:
+        <select name="productId" required>
+            <option th:each="p : ${products}" th:value="${p.productId}"
+                    th:text="|${p.name} (${p.price})|"></option>
+        </select>
+    </p>
+    <p>Quantity: <input name="qty" type="number" min="1" value="1" required></p>
+    <p><button type="submit">Add</button></p>
+</form>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Admin Dashboard</title></head>
+<body>
+<h1>Welcome, <span th:text="${admin.name}">Admin</span></h1>
+<p><a href="/">Home</a></p>
+<ul>
+    <li>ID: <span th:text="${admin.userId}"></span></li>
+    <li>Email: <span th:text="${admin.email}"></span></li>
+    <li>Role: <span th:text="${admin.roleName}"></span> (<span th:text="${admin.roleLabel}"></span>)</li>
+</ul>
+<p>
+    <a href="/products">Manage products</a> |
+    <a href="/products/add">Add product</a> |
+    <a href="/admins">All admins</a> |
+    <a href="/reviews/moderate">Moderate reviews</a>
+</p>
+</body>
+</html>

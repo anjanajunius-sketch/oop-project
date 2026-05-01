@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Customers</title></head>
+<body>
+<h1>Customers</h1>
+<p><a href="/">Home</a> | <a href="/customers/register">Register new customer</a></p>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Address</th><th>Phone</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.userId}">U-C1</td>
+        <td th:text="${c.name}">Name</td>
+        <td th:text="${c.email}">email</td>
+        <td th:text="${c.address}">addr</td>
+        <td th:text="${c.phone}">phone</td>
+        <td>
+            <a th:href="@{|/customers/${c.userId}/edit|}">edit</a> |
+            <a th:href="@{|/cart/${c.userId}|}">cart</a> |
+            <a th:href="@{|/orders/customer/${c.userId}|}">orders</a> |
+            <form th:action="@{|/customers/${c.userId}/delete|}" method="post" style="display:inline">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Orders</title></head>
+<body>
+<h1>Orders <span th:if="${customer != null}">for <span th:text="${customer.name}"></span></span></h1>
+<p><a href="/">Home</a></p>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr><th>Order ID</th><th>Customer</th><th>Cart</th><th>Date</th><th>Total</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.orderId}"></td>
+        <td th:text="${o.customer.name}"></td>
+        <td th:text="${o.cartId}"></td>
+        <td th:text="${o.date}"></td>
+        <td th:text="${o.totalAmount}"></td>
+        <td>
+            <a th:href="@{|/orders/${o.orderId}|}">summary</a> |
+            <form th:action="@{|/orders/${o.orderId}/delete|}" method="post" style="display:inline">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

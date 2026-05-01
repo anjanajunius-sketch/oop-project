@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Admins</title></head>
+<body>
+<h1>Admins</h1>
+<p><a href="/">Home</a> | <a href="/admins/register">Register new admin</a></p>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${admins}">
+        <td th:text="${a.userId}"></td>
+        <td th:text="${a.name}"></td>
+        <td th:text="${a.email}"></td>
+        <td th:text="${a.roleName}"></td>
+        <td>
+            <a th:href="@{|/admins/${a.userId}/edit|}">edit</a> |
+            <form th:action="@{|/admins/${a.userId}/delete|}" method="post" style="display:inline">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

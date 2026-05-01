@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Order Summary</title></head>
+<body>
+<h1>Order <span th:text="${order.orderId}"></span></h1>
+<p><a href="/">Home</a> | <a href="/orders">All orders</a></p>
+<ul>
+    <li>Customer: <span th:text="${order.customer.name}"></span> (<span th:text="${order.customer.userId}"></span>)</li>
+    <li>Date: <span th:text="${order.date}"></span></li>
+    <li>Cart ID: <span th:text="${order.cartId}"></span></li>
+    <li>Total: <span th:text="${order.totalAmount}"></span></li>
+</ul>
+<h2>Summary</h2>
+<pre th:text="${order.summary}"></pre>
+
+<h2>Edit date</h2>
+<form th:action="@{|/orders/${order.orderId}/update|}" method="post">
+    <p>Date: <input name="date" th:value="${order.date}" required></p>
+    <p><button type="submit">Update date</button></p>
+</form>
+</body>
+</html>

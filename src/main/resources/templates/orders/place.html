@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Place Order</title></head>
+<body>
+<h1>Place order for <span th:text="${customer.name}"></span></h1>
+<p><a href="/">Home</a> | <a th:href="@{|/cart/${customer.userId}|}">View cart</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form th:action="@{|/orders/place/${customer.userId}|}" method="post">
+    <p>The current cart contents will be checked out and the cart cleared.</p>
+    <p><button type="submit">Confirm and place order</button></p>
+</form>
+</body>
+</html>

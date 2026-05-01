@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Customer Profile</title></head>
+<body>
+<h1>Welcome, <span th:text="${customer.name}">Name</span></h1>
+<p><a href="/">Home</a></p>
+<ul>
+    <li>ID: <span th:text="${customer.userId}"></span></li>
+    <li>Email: <span th:text="${customer.email}"></span></li>
+    <li>Address: <span th:text="${customer.address}"></span></li>
+    <li>Phone: <span th:text="${customer.phone}"></span></li>
+    <li>Role: <span th:text="${customer.roleLabel}"></span></li>
+</ul>
+<p>
+    <a th:href="@{|/cart/${customer.userId}|}">My cart</a> |
+    <a th:href="@{|/orders/customer/${customer.userId}|}">My orders</a> |
+    <a th:href="@{|/customers/${customer.userId}/edit|}">Edit profile</a>
+</p>
+</body>
+</html>

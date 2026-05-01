@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Edit Admin</title></head>
+<body>
+<h1>Edit Admin <span th:text="${admin.userId}"></span></h1>
+<p><a href="/">Home</a> | <a href="/admins">Admins</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form th:action="@{|/admins/${admin.userId}/edit|}" method="post">
+    <p>Name: <input name="name" th:value="${admin.name}" required></p>
+    <p>Email: <input name="email" type="email" th:value="${admin.email}" required></p>
+    <p>Role name: <input name="roleName" th:value="${admin.roleName}"></p>
+    <p><button type="submit">Save</button></p>
+</form>
+</body>
+</html>

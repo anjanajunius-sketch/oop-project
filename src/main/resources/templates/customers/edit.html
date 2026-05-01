@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Edit Customer</title></head>
+<body>
+<h1>Edit Customer <span th:text="${customer.userId}"></span></h1>
+<p><a href="/">Home</a> | <a href="/customers">Customers</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form th:action="@{|/customers/${customer.userId}/edit|}" method="post">
+    <p>Name: <input name="name" th:value="${customer.name}" required></p>
+    <p>Email: <input name="email" type="email" th:value="${customer.email}" required></p>
+    <p>Address: <input name="address" th:value="${customer.address}"></p>
+    <p>Phone: <input name="phone" th:value="${customer.phone}"></p>
+    <p><button type="submit">Save</button></p>
+</form>
+</body>
+</html>

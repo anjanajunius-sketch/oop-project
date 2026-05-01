@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Register Admin</title></head>
+<body>
+<h1>Register Admin</h1>
+<p><a href="/">Home</a> | <a href="/admins">Admins</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form action="/admins/register" method="post">
+    <p>Name: <input name="name" required></p>
+    <p>Email: <input name="email" type="email" required></p>
+    <p>Password: <input name="password" type="password" required></p>
+    <p>Role name: <input name="roleName" placeholder="ADMIN"></p>
+    <p><button type="submit">Register</button></p>
+</form>
+</body>
+</html>

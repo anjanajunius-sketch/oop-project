@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Add Review</title></head>
+<body>
+<h1>Add Review</h1>
+<p><a href="/">Home</a> | <a href="/reviews">Reviews</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form action="/reviews/add" method="post">
+    <p>Customer:
+        <select name="customerId" required>
+            <option th:each="c : ${customers}" th:value="${c.userId}"
+                    th:text="|${c.name} (${c.userId})|"></option>
+        </select>
+    </p>
+    <p>Product:
+        <select name="productId" required>
+            <option th:each="p : ${products}" th:value="${p.productId}"
+                    th:text="|${p.name} (${p.productId})|"></option>
+        </select>
+    </p>
+    <p>Rating (1-5): <input name="rating" type="number" min="1" max="5" required></p>
+    <p>Comment: <textarea name="comment" rows="3" cols="40"></textarea></p>
+    <p><button type="submit">Submit</button></p>
+</form>
+</body>
+</html>

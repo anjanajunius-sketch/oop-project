@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Products</title></head>
+<body>
+<h1>Products</h1>
+<p><a href="/">Home</a> | <a href="/products/add">Add product</a></p>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Avg rating</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${products}">
+        <td th:text="${p.productId}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.quantity}"></td>
+        <td th:text="${#numbers.formatDecimal(p.averageRating, 1, 2)}"></td>
+        <td>
+            <a th:href="@{|/products/${p.productId}/edit|}">edit</a> |
+            <a th:href="@{|/reviews/product/${p.productId}|}">reviews</a> |
+            <form th:action="@{|/products/${p.productId}/delete|}" method="post" style="display:inline">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Reviews</title></head>
+<body>
+<h1>Reviews <span th:if="${product != null}">for <span th:text="${product.name}"></span></span></h1>
+<p><a href="/">Home</a> | <a href="/reviews/add">Add review</a> | <a href="/reviews/moderate">Moderate</a></p>
+<table border="1" cellpadding="6">
+    <thead>
+    <tr><th>ID</th><th>Product</th><th>Customer</th><th>Rating</th><th>Comment</th><th>Created</th><th>Moderated</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${reviews}">
+        <td th:text="${r.reviewId}"></td>
+        <td th:text="${r.product.name}"></td>
+        <td th:text="${r.customer.name}"></td>
+        <td th:text="${r.rating}"></td>
+        <td th:text="${r.comment}"></td>
+        <td th:text="${r.createdAt}"></td>
+        <td th:text="${r.moderated}"></td>
+        <td>
+            <a th:href="@{|/reviews/${r.reviewId}/edit|}">edit</a> |
+            <form th:action="@{|/reviews/${r.reviewId}/delete|}" method="post" style="display:inline">
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

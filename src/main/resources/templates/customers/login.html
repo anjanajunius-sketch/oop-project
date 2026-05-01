@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Customer Login</title></head>
+<body>
+<h1>Customer Login</h1>
+<p><a href="/">Home</a> | <a href="/customers/register">Register</a></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+<form action="/customers/login" method="post">
+    <p>Email: <input name="email" type="email" required></p>
+    <p>Password: <input name="password" type="password" required></p>
+    <p><button type="submit">Login</button></p>
+</form>
+</body>
+</html>
