@@ -45,7 +45,7 @@ public class CustomerService {
         }
         String userId = "U-C-" + UUID.randomUUID().toString().substring(0, 8);
         Customer c = new Customer(userId, name, email, passwordEncoder.encode(rawPassword), address, phone);
-        customerRepository.save(c);
+        c = customerRepository.save(c);
 
         Cart cart = new Cart("CRT-" + UUID.randomUUID().toString().substring(0, 8), c);
         cartRepository.save(cart);

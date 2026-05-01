@@ -82,7 +82,7 @@ public class SeedDataRunner implements CommandLineRunner {
             return existing;
         }
         Customer c = new Customer(userId, name, email, passwordEncoder.encode(rawPassword), address, phone);
-        customerRepository.save(c);
+        c = customerRepository.save(c);
 
         if (cartRepository.findById(cartId).isEmpty()) {
             cartRepository.save(new Cart(cartId, c));
